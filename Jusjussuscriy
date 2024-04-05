@@ -1,0 +1,97 @@
+wait(1.2)
+game.StarterGui:SetCore("SendNotification", {
+Title = "Veux hub"; -- the title (ofc)
+Text = "Script Made By #LocalgoodDucks"; -- what the text says 
+Icon = "http://www.roblox.com/asset/?id=16945188272"; -- the image if u want. 
+Duration = 7; -- how long the notification should in secounds
+})
+
+local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+
+local PhantomForcesWindow = Library:NewWindow("Vexu Hub")
+
+local KillingCheats = PhantomForcesWindow:NewSection("Main")
+
+KillingCheats:CreateButton("Void kill", function()
+-- Function to get a random player in the same server
+local function getRandomPlayer()
+    local players = game.Players:GetPlayers()
+    if #players > 0 then
+        return players[math.random(1, #players)]
+    else
+        return nil
+    end
+end
+
+-- Function to teleport the executing player to a random player, activate CursedStrikesService, wait, adjust CFrame, wait, then teleport back
+local function teleportAndActivateCursedStrikes()
+    local executingPlayer = game.Players.LocalPlayer
+    local randomPlayer = getRandomPlayer()
+    
+    if randomPlayer then
+        local randomPlayerCharacter = randomPlayer.Character
+        if randomPlayerCharacter then
+            local randomPlayerHumanoidRootPart = randomPlayerCharacter:FindFirstChild("HumanoidRootPart")
+            if randomPlayerHumanoidRootPart then
+                -- Get the position of the random player's feet
+                local destinationPosition = randomPlayerHumanoidRootPart.Position - Vector3.new(0, randomPlayerCharacter.Humanoid.HipHeight, 0)
+                -- Add a small delay before teleporting
+                wait(0.1)
+                -- Teleport to the adjusted position near the random player's feet
+                executingPlayer.Character:MoveTo(destinationPosition)
+                print("Teleported to", randomPlayer.Name)
+                
+                -- Execute the script to activate CursedStrikesService
+                local args = {[1] = false}
+                game:GetService("ReplicatedStorage").Knit.Knit.Services.CursedStrikesService.RE.Activated:FireServer(unpack(args))
+                
+                -- Wait for 2 seconds
+                wait(2)
+                
+                -- Adjust the CFrame
+                executingPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(61.05099868774414, -133.76470947265625, 342.4779357910156)
+                
+                -- Wait for another 3 seconds
+                wait(3)
+                
+                -- Teleport back to the original position
+                executingPlayer.Character:MoveTo(executingPlayer.Character.PrimaryPart.Position)
+                
+                -- Display notification when returning to original position
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Veux Hub",
+                    Text = "Done ✅",
+                    Icon = "rbxassetid://17017016823",
+                    Duration = 3
+                })
+            end
+        end
+    else
+        warn("No other players in the server")
+    end
+end
+
+-- Example usage:
+teleportAndActivateCursedStrikes()
+  end)
+
+KillingCheats:CreateToggle("Hitbox suggestion to use ", function(value)
+_G.HeadSize = 15
+_G.Disabled = true
+ 
+game:GetService('RunService').RenderStepped:connect(function()
+if _G.Disabled then
+for i,v in next, game:GetService('Players'):GetPlayers() do
+if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+pcall(function()
+v.Character.HumanoidRootPart.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+v.Character.HumanoidRootPart.Transparency = 0.7
+v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really blue")
+v.Character.HumanoidRootPart.Material = "Neon"
+v.Character.HumanoidRootPart.CanCollide = false
+end)
+end
+end
+end
+end)
+end)
