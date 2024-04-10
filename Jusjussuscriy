@@ -96,20 +96,11 @@ end
 end)
 end)
 
--- UI Library
-local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
-
--- Get the window and section
-local PhantomForcesWindow = Library:NewWindow("Combat")
-local KillingCheats = PhantomForcesWindow:NewSection("Kill Options")
-
 -- Store the selected player name
 local selectedPlayerName = nil
 
--- Keep track of whether the dropdown has been created
 local dropdownCreated = false
 
--- Function to create or update the dropdown with player usernames
 local function updateDropdown()
     local playerNames = {}
     
@@ -133,8 +124,8 @@ local function updateDropdown()
     end
 end
 
--- Function to teleport to the selected player and execute additional code
-local function teleportToPlayerAndExecuteScript()
+-- Function to teleport to the selected player, execute script, wait, and then return to the original position
+local function teleportExecuteWaitReturn()
     -- Check if a player is selected
     if selectedPlayerName then
         -- Get the player object by name
@@ -143,14 +134,17 @@ local function teleportToPlayerAndExecuteScript()
         if player then
             -- Store the original position before teleporting
             local originalPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            -- Teleport to the player's position
             game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(player.Character.PrimaryPart.CFrame)
             -- Execute the additional script
             local args = {[1] = false}
             game:GetService("ReplicatedStorage").Knit.Knit.Services.CursedStrikesService.RE.Activated:FireServer(unpack(args))
+            -- Wait for 2 seconds
+            wait(2)
+            -- Teleport back to the original position
+            game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(originalPosition)
             -- Wait for 3 seconds
             wait(3)
-            -- Teleport the character back to the original position
-            game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(originalPosition)
         else
             game.StarterGui:SetCore("SendNotification", {
                 Title = "Error",
@@ -168,32 +162,7 @@ local function teleportToPlayerAndExecuteScript()
 end
 
 -- Create the button for teleporting and executing the script
-KillingCheats:CreateButton("Teleport and Execute Script", teleportToPlayerAndExecuteScript)
-
--- Create the button for teleporting only
-KillingCheats:CreateButton("Teleport Only", function()
-    -- Check if a player is selected
-    if selectedPlayerName then
-        -- Get the player object by name
-        local player = game.Players:FindFirstChild(selectedPlayerName)
-        -- Teleport the character to the player's position if they exist
-        if player then
-            game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(player.Character.PrimaryPart.CFrame)
-        else
-            game.StarterGui:SetCore("SendNotification", {
-                Title = "Error",
-                Text = "Player not found.",
-                Duration = 5
-            })
-        end
-    else
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Error",
-            Text = "Please select a player.",
-            Duration = 5
-        })
-    end
-end)
+KillingCheats:CreateButton("Teleport, Execute Script, and Return", teleportExecuteWaitReturn)
 
 -- Call the function to create or update the dropdown initially
 updateDropdown()
