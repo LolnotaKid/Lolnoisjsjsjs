@@ -96,3 +96,83 @@ end
 end)
 end)
 
+-- Store the selected player name
+local selectedPlayerName = nil
+
+-- Keep track of whether the dropdown has been created
+local dropdownCreated = false
+
+-- Function to create or update the dropdown with player usernames
+local function updateDropdown()
+    local playerNames = {}
+    
+    -- Get the Players service
+    local Players = game:GetService("Players")
+    
+    -- Loop through each player in the game and add their username to the table
+    for _, player in ipairs(Players:GetPlayers()) do
+        table.insert(playerNames, player.Name)
+    end
+    
+    -- If the dropdown hasn't been created, create it
+    if not dropdownCreated then
+        KillingCheats:CreateDropdown("DropDown", playerNames, 2, function(text)
+            selectedPlayerName = text
+        end)
+        dropdownCreated = true
+    else
+        -- Update the dropdown with player names
+        KillingCheats:GetDropdown("DropDown"):UpdateOptions(playerNames)
+    end
+end
+
+-- Function to teleport to the selected player, execute script, wait, and then return to the original position
+local function teleportExecuteWaitReturn()
+    -- Check if a player is selected
+    if selectedPlayerName then
+        -- Get the player object by name
+        local player = game.Players:FindFirstChild(selectedPlayerName)
+        -- Teleport the character to the player's position if they exist
+        if player then
+            -- Store the original position before teleporting
+            local originalPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            -- Teleport to the player's position
+            game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(player.Character.PrimaryPart.CFrame)
+            -- Execute the additional script
+            local args = {[1] = false}
+            game:GetService("ReplicatedStorage").Knit.Knit.Services.CursedStrikesService.RE.Activated:FireServer(unpack(args))
+            -- Wait for 2 seconds
+            wait(2)
+            -- Adjust the character's CFrame
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(61.05099868774414, -133.76470947265625, 342.4779357910156)
+            -- Wait for 3 seconds
+            wait(3)
+            -- Teleport back to the original position
+            game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(originalPosition)
+        else
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "Error",
+                Text = "Player not found.",
+                Duration = 5
+            })
+        end
+    else
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Error",
+            Text = "Please select a player.",
+            Duration = 5
+        })
+    end
+end
+
+-- Create the button for teleporting, executing the script, and returning to the original position
+KillingCheats:CreateButton("Teleport username player", teleportExecuteWaitReturn)
+
+-- Call the function to create or update the dropdown initially
+updateDropdown()
+
+-- Listen for player added/removed events to update the dropdown dynamically
+game.Players.PlayerAdded:Connect(updateDropdown)
+game.Players.PlayerRemoving:Connect(updateDropdown)
+
+
