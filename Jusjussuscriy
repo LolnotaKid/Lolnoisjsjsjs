@@ -1,9 +1,9 @@
 wait(1.2)
 game.StarterGui:SetCore("SendNotification", {
-Title = "Veux hub"; -- the title (ofc)
-Text = "Script Made By #LocalgoodDucks"; -- what the text says 
-Icon = "http://www.roblox.com/asset/?id=16945188272"; -- the image if u want. 
-Duration = 7; -- how long the notification should in secounds
+Title = "Veux hub";
+Text = "Script Made By #GOODDUCK |YT";
+Icon = "";
+Duration = 7;
 })
 
 local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
@@ -13,7 +13,7 @@ local PhantomForcesWindow = Library:NewWindow("Veux Hub •v1•")
 local KillingCheats = PhantomForcesWindow:NewSection("Main")
 
 KillingCheats:CreateButton("Void kill", function()
--- Function to get a random player in the same server
+
 local function getRandomPlayer()
     local players = game.Players:GetPlayers()
     if #players > 0 then
@@ -23,7 +23,6 @@ local function getRandomPlayer()
     end
 end
 
--- Function to teleport the executing player to a random player, activate CursedStrikesService, wait, adjust CFrame, wait, then teleport back
 local function teleportAndActivateCursedStrikes()
     local executingPlayer = game.Players.LocalPlayer
     local randomPlayer = getRandomPlayer()
@@ -33,31 +32,21 @@ local function teleportAndActivateCursedStrikes()
         if randomPlayerCharacter then
             local randomPlayerHumanoidRootPart = randomPlayerCharacter:FindFirstChild("HumanoidRootPart")
             if randomPlayerHumanoidRootPart then
-                -- Get the position of the random player's feet
                 local destinationPosition = randomPlayerHumanoidRootPart.Position - Vector3.new(0, randomPlayerCharacter.Humanoid.HipHeight, 0)
-                -- Add a small delay before teleporting
                 wait(0.1)
-                -- Teleport to the adjusted position near the random player's feet
                 executingPlayer.Character:MoveTo(destinationPosition)
-                print("Teleported to", randomPlayer.Name)
                 
-                -- Execute the script to activate CursedStrikesService
                 local args = {[1] = false}
                 game:GetService("ReplicatedStorage").Knit.Knit.Services.CursedStrikesService.RE.Activated:FireServer(unpack(args))
                 
-                -- Wait for 2 seconds
                 wait(2)
                 
-                -- Adjust the CFrame
                 executingPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(61.05099868774414, -133.76470947265625, 342.4779357910156)
                 
-                -- Wait for another 3 seconds
                 wait(3)
                 
-                -- Teleport back to the original position
                 executingPlayer.Character:MoveTo(executingPlayer.Character.PrimaryPart.Position)
                 
-                -- Display notification when returning to original position
                 game.StarterGui:SetCore("SendNotification", {
                     Title = "Veux Hub",
                     Text = "Done ✅",
@@ -71,9 +60,9 @@ local function teleportAndActivateCursedStrikes()
     end
 end
 
--- Example usage:
+
 teleportAndActivateCursedStrikes()
-  end)
+end)
 
 KillingCheats:CreateToggle("Hitbox suggestion to use ", function(value)
 _G.HeadSize = 15
@@ -96,58 +85,55 @@ end
 end)
 end)
 
--- Store the selected player name
+
 local selectedPlayerName = nil
 
--- Keep track of whether the dropdown has been created
+
 local dropdownCreated = false
 
--- Function to create or update the dropdown with player usernames
+
 local function updateDropdown()
     local playerNames = {}
     
-    -- Get the Players service
+    
     local Players = game:GetService("Players")
     
-    -- Loop through each player in the game and add their username to the table
+    
     for _, player in ipairs(Players:GetPlayers()) do
         table.insert(playerNames, player.Name)
     end
     
-    -- If the dropdown hasn't been created, create it
+    
     if not dropdownCreated then
         KillingCheats:CreateDropdown("DropDown", playerNames, 2, function(text)
             selectedPlayerName = text
         end)
         dropdownCreated = true
     else
-        -- Update the dropdown with player names
+        
         KillingCheats:GetDropdown("DropDown"):UpdateOptions(playerNames)
     end
 end
 
--- Function to teleport to the selected player, execute script, wait, and then return to the original position
+
 local function teleportExecuteWaitReturn()
-    -- Check if a player is selected
     if selectedPlayerName then
-        -- Get the player object by name
+        
         local player = game.Players:FindFirstChild(selectedPlayerName)
-        -- Teleport the character to the player's position if they exist
+        
         if player then
-            -- Store the original position before teleporting
             local originalPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-            -- Teleport to the player's position
             game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(player.Character.PrimaryPart.CFrame)
-            -- Execute the additional script
+            
             local args = {[1] = false}
             game:GetService("ReplicatedStorage").Knit.Knit.Services.CursedStrikesService.RE.Activated:FireServer(unpack(args))
-            -- Wait for 2 seconds
+            
             wait(2)
-            -- Adjust the character's CFrame
+            
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(61.05099868774414, -133.76470947265625, 342.4779357910156)
-            -- Wait for 3 seconds
+            
             wait(3)
-            -- Teleport back to the original position
+            
             game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(originalPosition)
         else
             game.StarterGui:SetCore("SendNotification", {
@@ -165,14 +151,10 @@ local function teleportExecuteWaitReturn()
     end
 end
 
--- Create the button for teleporting, executing the script, and returning to the original position
+
 KillingCheats:CreateButton("Teleport username player", teleportExecuteWaitReturn)
 
--- Call the function to create or update the dropdown initially
 updateDropdown()
 
--- Listen for player added/removed events to update the dropdown dynamically
 game.Players.PlayerAdded:Connect(updateDropdown)
 game.Players.PlayerRemoving:Connect(updateDropdown)
-
-
