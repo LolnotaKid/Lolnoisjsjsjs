@@ -188,3 +188,5 @@ updateDropdown()
 
 game.Players.PlayerAdded:Connect(updateDropdown)
 game.Players.PlayerRemoving:Connect(updateDropdown)
+
+local KillingCheats = PhantomForcesWindow:NewSection("More coming...")
