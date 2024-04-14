@@ -189,4 +189,7 @@ updateDropdown()
 game.Players.PlayerAdded:Connect(updateDropdown)
 game.Players.PlayerRemoving:Connect(updateDropdown)
 
-local KillingCheats = PhantomForcesWindow:NewSection("More coming...")
+local KillingChea = PhantomForcesWindow:NewSection("try Full veux hub..")
+KillingChea:CreateButton("click here to try", function()
+
+end)
