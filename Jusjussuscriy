@@ -1,195 +1,35 @@
-local VeuxDisplay = Instance.new("ScreenGui")
-VeuxDisplay.Name = "VeuxDisplay"
-VeuxDisplay.Parent = game.CoreGui
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
-local messageLabel = Instance.new("TextLabel")
-messageLabel.Text = "VEUX HUB"
-messageLabel.Size = UDim2.new(0, 200, 0, 50)
-messageLabel.Position = UDim2.new(0.5, -100, 0.4, -25)  -- Adjusted the Y position to be 40% from the top
-messageLabel.BackgroundTransparency = 1
-messageLabel.TextColor3 = Color3.new(1, 1, 1)
-messageLabel.TextSize = 24
-messageLabel.Font = Enum.Font.GothamBold
-messageLabel.Parent = VeuxDisplay
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = playerGui
 
-local function animateText()
-    local duration = 9  -- Changed the duration to 9 seconds
-    for i = duration, 0, -1 do
-        wait(1)
-        if i <= 5 then
-            messageLabel:TweenPosition(UDim2.new(0.5, -100, 1, 25), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 2, true)
-            if i == 5 then
-                wait(1)  -- Delay for an additional second before destroying the display
-            end
-        end
-    end
-    VeuxDisplay:Destroy()
-end
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0.6, 0, 0.4, 0)
+frame.Position = UDim2.new(0.2, 0, 0.3, 0)
+frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+frame.BackgroundTransparency = 0.4
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
 
-coroutine.wrap(animateText)()
+local textLabel = Instance.new("TextLabel")
+textLabel.Size = UDim2.new(0.9, 0, 0.7, 0)
+textLabel.Position = UDim2.new(0.05, 0, 0.1, 0)
+textLabel.BackgroundTransparency = 1
+textLabel.Text = "Veux Hub script in no longer works so it's useless. maybe we make another script"
+textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+textLabel.TextScaled = true
+textLabel.Parent = frame
 
-wait(1.2)
-game.StarterGui:SetCore("SendNotification", {
-Title = "Veux hub";
-Text = "Script Made By #GOODDUCK |YT";
-Icon = "";
-Duration = 7;
-})
+local okButton = Instance.new("TextButton")
+okButton.Size = UDim2.new(0.2, 0, 0.15, 0)
+okButton.Position = UDim2.new(0.75, 0, 0.8, 0)
+okButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+okButton.Text = "😢 Ok"
+okButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+okButton.TextScaled = true
+okButton.Parent = frame
 
-local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
-
-local PhantomForcesWindow = Library:NewWindow("Veux Hub •v1•")
-
-local KillingCheats = PhantomForcesWindow:NewSection("Main")
-
-KillingCheats:CreateButton("Void kill", function()
-
-local function getRandomPlayer()
-    local players = game.Players:GetPlayers()
-    if #players > 0 then
-        return players[math.random(1, #players)]
-    else
-        return nil
-    end
-end
-
-local function teleportAndActivateCursedStrikes()
-    local executingPlayer = game.Players.LocalPlayer
-    local randomPlayer = getRandomPlayer()
-    
-    if randomPlayer then
-        local randomPlayerCharacter = randomPlayer.Character
-        if randomPlayerCharacter then
-            local randomPlayerHumanoidRootPart = randomPlayerCharacter:FindFirstChild("HumanoidRootPart")
-            if randomPlayerHumanoidRootPart then
-                local destinationPosition = randomPlayerHumanoidRootPart.Position - Vector3.new(0, randomPlayerCharacter.Humanoid.HipHeight, 0)
-                wait(0.1)
-                executingPlayer.Character:MoveTo(destinationPosition)
-                
-                local args = {[1] = false}
-                game:GetService("ReplicatedStorage").Knit.Knit.Services.CursedStrikesService.RE.Activated:FireServer(unpack(args))
-                
-                wait(2)
-                
-                executingPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(61.05099868774414, -133.76470947265625, 342.4779357910156)
-                
-                wait(3)
-                
-                executingPlayer.Character:MoveTo(executingPlayer.Character.PrimaryPart.Position)
-                
-                game.StarterGui:SetCore("SendNotification", {
-                    Title = "Veux Hub",
-                    Text = "Done ✅",
-                    Icon = "rbxassetid://17017016823",
-                    Duration = 3
-                })
-            end
-        end
-    else
-        warn("No other players in the server")
-    end
-end
-
-
-teleportAndActivateCursedStrikes()
-end)
-
-KillingCheats:CreateToggle("Hitbox suggestion to use ", function(value)
-_G.HeadSize = 15
-_G.Disabled = true
- 
-game:GetService('RunService').RenderStepped:connect(function()
-if _G.Disabled then
-for i,v in next, game:GetService('Players'):GetPlayers() do
-if v.Name ~= game:GetService('Players').LocalPlayer.Name then
-pcall(function()
-v.Character.HumanoidRootPart.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
-v.Character.HumanoidRootPart.Transparency = 0.7
-v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really blue")
-v.Character.HumanoidRootPart.Material = "Neon"
-v.Character.HumanoidRootPart.CanCollide = false
-end)
-end
-end
-end
-end)
-end)
-
-
-local selectedPlayerName = nil
-
-
-local dropdownCreated = false
-
-
-local function updateDropdown()
-    local playerNames = {}
-    
-    
-    local Players = game:GetService("Players")
-    
-    
-    for _, player in ipairs(Players:GetPlayers()) do
-        table.insert(playerNames, player.Name)
-    end
-    
-    
-    if not dropdownCreated then
-        KillingCheats:CreateDropdown("DropDown", playerNames, 2, function(text)
-            selectedPlayerName = text
-        end)
-        dropdownCreated = true
-    else
-        
-        KillingCheats:GetDropdown("DropDown"):UpdateOptions(playerNames)
-    end
-end
-
-
-local function teleportExecuteWaitReturn()
-    if selectedPlayerName then
-        
-        local player = game.Players:FindFirstChild(selectedPlayerName)
-        
-        if player then
-            local originalPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-            game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(player.Character.PrimaryPart.CFrame)
-            
-            local args = {[1] = false}
-            game:GetService("ReplicatedStorage").Knit.Knit.Services.CursedStrikesService.RE.Activated:FireServer(unpack(args))
-            
-            wait(2)
-            
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(61.05099868774414, -133.76470947265625, 342.4779357910156)
-            
-            wait(3)
-            
-            game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(originalPosition)
-        else
-            game.StarterGui:SetCore("SendNotification", {
-                Title = "Error",
-                Text = "Player not found.",
-                Duration = 5
-            })
-        end
-    else
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Error",
-            Text = "Please select a player.",
-            Duration = 5
-        })
-    end
-end
-
-
-KillingCheats:CreateButton("Teleport username player", teleportExecuteWaitReturn)
-
-updateDropdown()
-
-game.Players.PlayerAdded:Connect(updateDropdown)
-game.Players.PlayerRemoving:Connect(updateDropdown)
-
-local KillingChea = PhantomForcesWindow:NewSection("try Full veux hub..")
-KillingChea:CreateButton("click here to try", function()
-
+okButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
 end)
